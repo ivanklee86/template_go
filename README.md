@@ -1,1 +1,1 @@
-# sandbox_go
+# Golang repository template
