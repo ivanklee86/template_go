@@ -5,7 +5,8 @@ set -ex
 rm -rf /home/vscode/.uv_cache | true
 mkdir /home/vscode/.uv_cache | true
 uv venv
-source .venv/bin/activate
+uv pip install -r requirements.txt
+uv run pre-commit install
 
 # Configure git
 if [ "$CODESPACES" != "true" ]; then
