@@ -4,11 +4,9 @@
 		"dockerfile": "Dockerfile",
 		"context": "..",
 		"args": {
-			"VARIANT": "debian-12",
-
-			// Choose node version or none to skip.
-			"NODE_VERSION": "none",
-
+			"BASE": "debian-12",
+			"GO_VERSION": "go1.24.0.linux-amd64.tar.gz",
+			"GO_VERSION_HASH": "dea9ca38a0b852a74e81c26134671af7c0fbe65d81b0dc1c5bfe22cf7d4c8858",
 			"PYTHON_VERSION": "3.13"
 		}
 	},
@@ -49,9 +47,7 @@
 	"postCreateCommand": "bash ./.devcontainer/post_install.sh",
 
 	"features": {
-		"ghcr.io/devcontainers/features/docker-in-docker:2": {
-			"dockerDashComposeVersion": "v2"
-		}
+		"ghcr.io/devcontainers/features/docker-in-docker:2": {}
 	},
 
 	// Comment out to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.

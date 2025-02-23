@@ -1,11 +1,6 @@
 # See here for image contents: https://github.com/microsoft/vscode-dev-containers/blob/main/containers/go/.devcontainer/Dockerfile
-ARG VARIANT="debian-12"
-FROM mcr.microsoft.com/devcontainers/base:${VARIANT}
-
-# Install dependencies.
-# [Choice] Node.js version: none, lts/*, 16, 14, 12, 10
-ARG NODE_VERSION="none"
-RUN if [ "${NODE_VERSION}" != "none" ]; then su vscode -c "umask 0002 && . /usr/local/share/nvm/nvm.sh && nvm install ${NODE_VERSION} 2>&1"; fi
+ARG BASE="debian-12"
+FROM mcr.microsoft.com/devcontainers/base:${BASE}
 
 # Install standard packages
 RUN apt-get clean && \
@@ -25,9 +20,12 @@ USER vscode
 WORKDIR /home/vscode
 
 # Install and configure Golang
-RUN wget "https://dl.google.com/go/$(curl https://go.dev/VERSION?m=text | head -n1).linux-amd64.tar.gz" && \
-    tar -zxf go*.linux-amd64.tar.gz && \
-    rm go*.linux-amd64.tar.gz
+ARG GO_VERSION=go1.24.0.linux-amd64.tar.gz
+ARG GO_VERSION_HASH=dea9ca38a0b852a74e81c26134671af7c0fbe65d81b0dc1c5bfe22cf7d4c8858
+RUN cd /home/vscode && curl -OL https://golang.org/dl/${GO_VERSION} && \
+    echo "${GO_VERSION_HASH} *${GO_VERSION}" | sha256sum -c - && \
+    tar -zxf ${GO_VERSION} && \
+    rm ${GO_VERSION}
 
 RUN mkdir -p /home/vscode/go-path
 RUN mkdir -p /home/vscode/go
@@ -47,4 +45,5 @@ ENV UV_LINK_MODE=copy
 RUN sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d
 
 # Go
+RUN go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 RUN go install github.com/jstemmer/go-junit-report/v2@latest
