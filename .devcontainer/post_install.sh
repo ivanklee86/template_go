@@ -1,6 +1,12 @@
 #!/bin/bash
 set -ex
 
+# Set up Python
+rm -rf /home/vscode/.uv_cache | true
+mkdir /home/vscode/.uv_cache | true
+uv venv
+source .venv/bin/activate
+
 # Configure git
 if [ "$CODESPACES" != "true" ]; then
     echo "Running locally, configure gpg."
